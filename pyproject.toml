@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "pysportsdb"
+version = "0.1.0"
+description = ""
+authors = ["Rui Silva"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+[tool.poetry.dev-dependencies]
+yapf = "^0.29.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
