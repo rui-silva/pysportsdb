@@ -1,21 +1,23 @@
-# script.module.thesportsdb
-![TheSportsDb Icon](http://s17.postimg.org/h3eanic3z/icon.png)
+# pysportsdb
+![TheSportsDb Icon](https://www.thesportsdb.com/images/logo_new-medium.png)
 
-A python module packaged as a Kodi script module to wrap all thesportsdb API methods and for you to use on your own addon. An API key is required, please visit [thesportsdb](http://www.thesportsdb.com/forum/viewtopic.php?f=6&t=6) for more information.
+A python module to wrap all thesportsdb API methods. An API key is
+required, please visit
+[thesportsdb](http://www.thesportsdb.com/forum/viewtopic.php?f=6&t=6)
+for more information.
 
-##Usage
+Note: This forks
+[script.module.thesportsdb](https://github.com/enen92/script.module.thesportsdb),
+with the goal of providing the API as a standalone library, with no
+xbmc dependencies.
 
-###Addon.xml
-The module most be imported in the addon.xml of your addon and pointing to the correct version of the module
-```xml
-<import addon="script.module.thesportsdb" version="1.0.0"/>
-```
+## Usage
 
-###Pythonic usage
+### Pythonic usage
 
 The module follows the API structure described [Here](http://www.thesportsdb.com/forum/viewtopic.php?f=6&t=5). Every group method (Search,Lookups,Schedules,Livescores) is a Python class and all the endpoints (eg: lookupleague) is part of a class method. The module maps the json data to objects as much as possible, so each call returns one or more Team objects, League objects, Player objects, Livescores objects, Table objects, etc. Below all the classes and methods are explained with examples. Object properties are detailed later despite being exemplified some times.
 
-###A really simple usage example...
+### A really simple usage example...
 
 ```python
 import thesportsdb
@@ -25,9 +27,9 @@ for player in players:
     print(player.strPlayer)
 ```
 
-###Module methods
+### Module methods
 
-####Search
+#### Search
 * Search for teams by name - (returns a list of team objects)
 ```python
 teams = api.Search().Teams(team="Arsenal")
@@ -116,7 +118,7 @@ print(userloves.Teams, userloves.Players, userloves.Events)
 >> [<thesportsdb.team.Team instance at 0x129d4d200>, <thesportsdb.team.Team instance at 0x11e1ba5f0>,....
 ```
 
-####Lookups
+#### Lookups
 * Provides League Details given the leagueid (returns a list of league objects)
 ```python
 leagues = api.Lookups().League(leagueid=4346)
@@ -181,7 +183,7 @@ if table:
 >> http://www.thesportsdb.com/images/media/team/badge/xvrwus1420778297.png
 ```
 
-####Livescores
+#### Livescores
 
 * Soccer Livescores (returns a list of Livescores objects - no Team objects defined)
 ```python
@@ -203,7 +205,7 @@ if matches:
 		print("HomeTeam: %s HomeTeamLogo: %s %s:%s AwayTeam: %s AwayTeamLogo: %s" % (match.HomeTeam,match.HomeTeamObj.strTeamBadge,match.HomeGoals,match.AwayGoals,match.AwayTeam,match.AwayTeamObj.strTeamBadge))
 ```
 
-####Schedules
+#### Schedules
 
 * Next 5 Events by Team Id (returns a list of Event Objects)
 ```python
@@ -267,7 +269,7 @@ events = api.Schedules().Lookup(leagueid=4328,rnd=38,season=1415)
 events = api.Schedules().Lookup(leagueid=4328,season=1415)
 ```
 
-####Images
+#### Images
 TheSportsDB provides a way of getting a preview of the image. The same can be done in this module using `api.Image().Preview(image)`. A full example is below:
 ```python
 import thesportsdb
@@ -281,9 +283,9 @@ print(api.Image().Original(team.strTeamFanart4))
 >>http://www.thesportsdb.com/images/media/team/fanart/wqywqq1421075962.jpg
 ```
 
-###Objects
+### Objects
 
-####Team
+#### Team
 Default Properties
 * `idTeam` - id of the team in thesportsdb
 * `idSoccerXML` - id of the team in soccerXML
@@ -343,7 +345,7 @@ Specific module Properties
 * `RandomFanart` - Returns a random fanart or None as fallback
 * `strDescription` - Returns the description of the team in the language your Kodi instalation is using. Fallback is done to English
 
-####League
+#### League
 Default Properties
 * `idSoccerXML` - id of the league on soccerXML
 * `strSport` - sport of the league
@@ -391,7 +393,7 @@ Specific module Properties
 * `RandomFanart` - Returns a random fanart or None as fallback
 * `strDescription` - Returns the description of the team in the language your Kodi instalation is using. Fallback is done to English
 
-####Player
+#### Player
 Default Properties
 * `idPlayer` - player id on thesportsdb
 * `idTeam` - team id on thesportsdb
@@ -446,7 +448,7 @@ Specific module Properties
 * `dateBornAsDatetime` - Returns the birth date of the player as a datetime.date object
 * `dateSignedAsDatetime` - Returns the signing date of the player as a python datetime.date object
 
-####Table entry
+#### Table entry
 * `name` - name of the team
 * `teamid` - id of the team on thesportsdb 
 * `played` - number of played matches
@@ -459,7 +461,7 @@ Specific module Properties
 * `total` - number of points
 * `Team` - a team object (defined if objects=True). All the other team properties are available
 
-####Event
+#### Event
 Default Properties
 * `idEvent` - id of the event on thesportsdb
 * `idSoccerXML` - id of the event on soccerXML
@@ -518,7 +520,7 @@ Specific module Properties
 
 Note: event lookups do not return the team objects. You need a second lookup using the teamId's to grab the team objects
 
-####Livescores
+#### Livescores
 Default Properties
 * `Date` - datetime string for the event time (eg: "2016-01-28T17:30:00+00:00" - GMT timezone) 
 * `League` - League string for the live event
@@ -563,7 +565,7 @@ Specific module Properties
 * `DateTime` - Returns the date of the event as a python datetime object (GMT timezone)
 
 
-####User
+#### User
 * `strUsername ` - the user username
 * `Teams ` - a list of teamids for the teams the user loves (or team objects if objects=True)
 * `Players ` - a list of playerids for the players the user loves (or player objects if objects=True)

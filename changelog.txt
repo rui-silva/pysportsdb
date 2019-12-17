@@ -1,3 +1,7 @@
+[B]Version 1.0.1 - 17/12/2019[/B]
+-Upgraded to python3
+-Removed xbmc dependency
+
 [B]Version 1.0.0 - 28/1/2016[/B]
 -Module re-written from scratch
 
