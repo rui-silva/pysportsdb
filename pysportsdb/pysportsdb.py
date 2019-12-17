@@ -1,4 +1,5 @@
 import json
+import logging
 import urllib.request, urllib.parse, urllib.error
 import urllib.request, urllib.error, urllib.parse
 import team as _team
@@ -8,11 +9,10 @@ import event as _event
 import user as _user
 import livescores
 import tableentry
-import xbmc
 import datetime as _datetime
 from utils import util as _util
 
-__author__ = 'enen92'
+
 API_BASE_URL = 'http://www.thesportsdb.com/api/v1/json'
 
 
@@ -21,13 +21,10 @@ class Api:
         global API_KEY
         API_KEY = key
         if API_KEY != None and type(API_KEY) == str:
-            xbmc.log(
-                msg="[TheSportsDB] Module initiated with API key " +
-                str(API_KEY),
-                level=xbmc.LOGNOTICE)
+            logging.info(
+                f'[TheSportsDB] Module initiated with API key {str(API_KEY)}')
         else:
-            xbmc.log(
-                msg="[TheSportsDB] API Key is not valid", level=xbmc.LOGERROR)
+            logging.error("[TheSportsDB] API Key is not valid")
 
     class Lookups:
         def Team(self, teamid=None, leagueid=None):
@@ -38,9 +35,7 @@ class Api:
                 elif leagueid and not teamid:
                     url = f"{API_BASE_URL}/{API_KEY}/lookup_all_teams.php?id={str(leagueid)}"
                 else:
-                    xbmc.log(
-                        msg="[TheSportsDB] Invalid parameters",
-                        level=xbmc.LOGERROR)
+                    logging.error("[TheSportsDB] Invalid parameters")
                     return teamlist
                 data = json.load(urllib.request.urlopen(url))
                 teams = data["teams"]
@@ -48,9 +43,8 @@ class Api:
                     for tm in teams:
                         teamlist.append(_team.as_team(tm))
             else:
-                xbmc.log(
-                    msg="[TheSportsDB] teamid or leagueid must be provided",
-                    level=xbmc.LOGERROR)
+                logging.error(
+                    "[TheSportsDB] teamid or leagueid must be provided")
             return teamlist
 
         def League(self, leagueid=None):
@@ -63,9 +57,7 @@ class Api:
                     for lg in leagues:
                         leaguelist.append(_league.as_league(lg))
             else:
-                xbmc.log(
-                    msg="[TheSportsDB] leagueid must be provided",
-                    level=xbmc.LOGERROR)
+                logging.log("[TheSportsDB] leagueid must be provided", )
             return leaguelist
 
         def Player(self, playerid=None, teamid=None):
@@ -78,9 +70,7 @@ class Api:
                     url = f"{API_BASE_URL}/{API_KEY}/lookup_all_players.php?id={str(teamid)}"
                     key = "player"
                 else:
-                    xbmc.log(
-                        msg="[TheSportsDB] Invalid parameters",
-                        level=xbmc.LOGERROR)
+                    logging.log("[TheSportsDB] Invalid parameters", )
                     return playerlist
                 data = json.load(urllib.request.urlopen(url))
                 players = data[key]
@@ -88,9 +78,8 @@ class Api:
                     for pl in players:
                         playerlist.append(_player.as_player(pl))
             else:
-                xbmc.log(
-                    msg="[TheSportsDB] playerid or teamid must be provided",
-                    level=xbmc.LOGERROR)
+                logging.log(
+                    "[TheSportsDB] playerid or teamid must be provided", )
             return playerlist
 
         def Event(self, eventid=None):
@@ -103,16 +92,16 @@ class Api:
                     for ev in events:
                         eventlist.append(_event.as_event(ev))
             else:
-                xbmc.log(
-                    msg="[TheSportsDB] eventid must be provided",
-                    level=xbmc.LOGERROR)
+                logging.log("[TheSportsDB] eventid must be provided", )
             return eventlist
 
         def Table(self, leagueid=None, season=None, objects=False):
             table = []
             if leagueid:
                 if season:
-                    url = (f"{API_BASE_URL}/{API_KEY}/lookuptable.php?l={str(leagueid)}&s={str(season)}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/lookuptable.php?l={str(leagueid)}&s={str(season)}"
+                    )
                 else:
                     url = f"{API_BASE_URL}/{API_KEY}/lookuptable.php?l={str(leagueid)}"
                     if objects:
@@ -132,9 +121,7 @@ class Api:
                                 tentry.setTeamObject(self.Team(team_id)[0])
                         table.append(tentry)
             else:
-                xbmc.log(
-                    msg="[TheSportsDB] leagueid must be provided",
-                    level=xbmc.LOGERROR)
+                logging.log("[TheSportsDB] leagueid must be provided", )
             return table
 
         def Seasons(self, leagueid=None):
@@ -147,9 +134,7 @@ class Api:
                     for entry in entries:
                         seasonlist.append(entry["strSeason"])
             else:
-                xbmc.log(
-                    msg="[TheSportsDB] leagueid must be provided",
-                    level=xbmc.LOGERROR)
+                logging.log("[TheSportsDB] leagueid must be provided", )
             return seasonlist
 
     class Search:
@@ -159,9 +144,13 @@ class Api:
                 if team and not sport and not country and not league:
                     url = f"{API_BASE_URL}/{API_KEY}/searchteams.php?t={urllib.parse.quote(team)}"
                 elif not team and league and not sport and not country:
-                    url = (f"{API_BASE_URL}/{API_KEY}/search_all_teams.php?l={urllib.parse.quote(league)}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/search_all_teams.php?l={urllib.parse.quote(league)}"
+                    )
                 elif not team and not league and sport and country:
-                    url = (f"{API_BASE_URL}/{API_KEY}/search_all_teams.php?s={urllib.parse.quote(sport)}&c={urllib.parse.quote(country)}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/search_all_teams.php?s={urllib.parse.quote(sport)}&c={urllib.parse.quote(country)}"
+                    )
                 else:
                     url = None
                 if url:
@@ -171,45 +160,52 @@ class Api:
                         for tm in teams:
                             teamlist.append(_team.as_team(tm))
                 else:
-                    xbmc.log(
-                        msg="[TheSportsDB] Invalid Parameters",
-                        level=xbmc.LOGERROR)
+                    logging.log("[TheSportsDB] Invalid Parameters", )
             else:
-                xbmc.log(
-                    msg=
+                logging.log(
                     "[TheSportsDB] team,sport,country or league must be provided",
-                    level=xbmc.LOGERROR)
+                )
             return teamlist
 
         def Players(self, team=None, player=None):
             playerlist = []
             if team or player:
                 if team and not player:
-                    url = (f"{API_BASE_URL}/{API_KEY}/searchplayers.php?t={urllib.parse.quote(team)}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/searchplayers.php?t={urllib.parse.quote(team)}"
+                    )
                 elif not team and player:
-                    url = (f"{API_BASE_URL}/{API_KEY}/searchplayers.php?p={urllib.parse.quote(player)}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/searchplayers.php?p={urllib.parse.quote(player)}"
+                    )
                 else:
-                    url = (f"{API_BASE_URL}/{API_KEY}/searchplayers.php?t={urllib.parse.quote(team)}&p={urllib.parse.quote(player)}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/searchplayers.php?t={urllib.parse.quote(team)}&p={urllib.parse.quote(player)}"
+                    )
                 data = json.load(urllib.request.urlopen(url))
                 players = data["player"]
                 if players:
                     for pl in players:
                         playerlist.append(_player.as_player(pl))
             else:
-                xbmc.log(
-                    msg="[TheSportsDB] team or player must be provided",
-                    level=xbmc.LOGERROR)
+                logging.log("[TheSportsDB] team or player must be provided", )
             return playerlist
 
         def Events(self, event=None, filename=None, season=None):
             eventlist = []
             if event or season or filename:
                 if event and not season and not filename:
-                    url = (f"{API_BASE_URL}/{API_KEY}/searchevents.php?e={str(event).replace(' ', '_')}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/searchevents.php?e={str(event).replace(' ', '_')}"
+                    )
                 elif event and season:
-                    url = (f"{API_BASE_URL}/{API_KEY}/searchevents.php?e={str(event).replace(' ', '_')}&s={str(season)}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/searchevents.php?e={str(event).replace(' ', '_')}&s={str(season)}"
+                    )
                 elif filename:
-                    url = (f"{API_BASE_URL}/{API_KEY}/searchfilename.php?e={str(filename).replace(' ', '_')}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/searchfilename.php?e={str(filename).replace(' ', '_')}"
+                    )
                 else:
                     url = ""
                 if url:
@@ -219,30 +215,34 @@ class Api:
                         for ev in events:
                             eventlist.append(_event.as_event(ev))
             else:
-                xbmc.log(
-                    msg=
+                logging.log(
                     "[TheSportsDB] event and season or filename must be provided",
-                    level=xbmc.LOGERROR)
+                )
             return eventlist
 
         def Leagues(self, country=None, sport=None):
             leaguelist = []
             if country or sport:
                 if country and not sport:
-                    url = (f"{API_BASE_URL}/{API_KEY}/search_all_leagues.php?c={urllib.parse.quote(country)}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/search_all_leagues.php?c={urllib.parse.quote(country)}"
+                    )
                 elif not country and sport:
-                    url = (f"{API_BASE_URL}/{API_KEY}/search_all_leagues.php?s={urllib.parse.quote(sport)}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/search_all_leagues.php?s={urllib.parse.quote(sport)}"
+                    )
                 else:
-                    url = (f"{API_BASE_URL}/{API_KEY}/search_all_leagues.php?s={urllib.parse.quote(sport)}&c={urllib.parse.quote(country)}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/search_all_leagues.php?s={urllib.parse.quote(sport)}&c={urllib.parse.quote(country)}"
+                    )
                 data = json.load(urllib.request.urlopen(url))
                 leagues = data["countrys"]
                 if leagues:
                     for lg in leagues:
                         leaguelist.append(_league.as_league(lg))
             else:
-                xbmc.log(
-                    msg="[TheSportsDB] country or league must be provided",
-                    level=xbmc.LOGERROR)
+                logging.log(
+                    "[TheSportsDB] country or league must be provided", )
             return leaguelist
 
         def Loves(self, user=None, objects=False):
@@ -315,9 +315,7 @@ class Api:
                 userobj.setEvents(eventlist)
                 return userobj
             else:
-                xbmc.log(
-                    msg="[TheSportsDB] A user must be provided",
-                    level=xbmc.LOGERROR)
+                logging.log("[TheSportsDB] A user must be provided", )
 
         def Seasons(self, leagueid=None):
             seasonlist = []
@@ -329,9 +327,7 @@ class Api:
                     for season in seasons:
                         seasonlist.append(season["strSeason"])
             else:
-                xbmc.log(
-                    msg="[TheSportsDB] leagueid must be provided",
-                    level=xbmc.LOGERROR)
+                logging.log("[TheSportsDB] leagueid must be provided", )
             return seasonlist
 
     class Schedules:
@@ -346,9 +342,7 @@ class Api:
                         for event in events:
                             eventlist.append(_event.as_event(event))
                 else:
-                    xbmc.log(
-                        msg="[TheSportsDB] teamid must be provided",
-                        level=xbmc.LOGERROR)
+                    logging.log("[TheSportsDB] teamid must be provided", )
                 return eventlist
 
             def League(self, leagueid=None):
@@ -361,9 +355,7 @@ class Api:
                         for event in events:
                             eventlist.append(_event.as_event(event))
                 else:
-                    xbmc.log(
-                        msg="[TheSportsDB] leagueid must be provided",
-                        level=xbmc.LOGERROR)
+                    logging.log("[TheSportsDB] leagueid must be provided", )
                 return eventlist
 
         class Next:
@@ -377,9 +369,7 @@ class Api:
                         for event in events:
                             eventlist.append(_event.as_event(event))
                 else:
-                    xbmc.log(
-                        msg="[TheSportsDB] teamid must be provided",
-                        level=xbmc.LOGERROR)
+                    logging.log("[TheSportsDB] teamid must be provided", )
                 return eventlist
 
             def League(self, leagueid=None, rnd=None):
@@ -387,11 +377,10 @@ class Api:
                 if leagueid and not rnd:
                     url = f"{API_BASE_URL}/{API_KEY}/eventsnextleague.php?id={str(leagueid)}"
                 elif leagueid and rnd:
-                    url = (f"{API_BASE_URL}/{API_KEY}/eventsnextleague.php?id={str(leagueid)}&r={str(rnd)}")
+                    url = (f"{API_BASE_URL}/{API_KEY}/eventsnextleague.php"
+                           f"?id={str(leagueid)}&r={str(rnd)}")
                 else:
-                    xbmc.log(
-                        msg="[TheSportsDB] leagueid must be provided",
-                        level=xbmc.LOGERROR)
+                    logging.log("[TheSportsDB] leagueid must be provided", )
                     return eventlist
                 data = json.load(urllib.request.urlopen(url))
                 events = data["events"]
@@ -410,39 +399,42 @@ class Api:
                    sport=None):
             eventlist = []
             if leagueid and season and rnd:
-                url = (f"{API_BASE_URL}/{API_KEY}/eventsround.php?id={str(leagueid)}&r={str(rnd)}&s={str(season)}")
+                url = (f"{API_BASE_URL}/{API_KEY}/eventsround.php"
+                       f"?id={str(leagueid)}&r={str(rnd)}&s={str(season)}")
             elif leagueid and season and not rnd:
-                url = (f"{API_BASE_URL}/{API_KEY}/eventsseason.php?id={str(leagueid)}&s={str(season)}")
+                url = (f"{API_BASE_URL}/{API_KEY}/eventsseason.php"
+                       f"?id={str(leagueid)}&s={str(season)}")
             elif datestring or datetimedate:
                 if datestring:
                     if _util.CheckDateString(datestring):
                         pass
                     else:
-                        xbmc.log(
-                            msg=
-                            "[TheSportsDB] Wrong format for the datestring. Valid format is {YYYY-MM-DD} (eg: 2014-10-10)",
-                            level=xbmc.LOGERROR)
+                        logging.log(
+                            "[TheSportsDB] Wrong format for the datestring. "
+                            "Valid format is {YYYY-MM-DD} (eg: 2014-10-10)", )
                         return eventlist
                 else:
                     if _util.CheckDateTime(datetimedate):
                         datestring = datetimedate.strftime("%Y-%m-%d")
                     else:
-                        xbmc.log(
-                            msg=
-                            "[TheSportsDB] Wrong type for datetime object. A python datetime object is required",
-                            level=xbmc.LOGERROR)
+                        logging.log(
+                            "[TheSportsDB] Wrong type for datetime object. "
+                            "A python datetime object is required", )
                         return eventlist
                 if sport:
-                    url = (f"{API_BASE_URL}/{API_KEY}/eventsday.php?d={str(datestring)}&s={str(sport)}")
+                    url = (f"{API_BASE_URL}/{API_KEY}/eventsday.php"
+                           f"?d={str(datestring)}&s={str(sport)}")
                 elif league:
-                    url = (f"{API_BASE_URL}/{API_KEY}/eventsday.php?d={str(datestring)}&l={urllib.parse.quote(league)}")
+                    url = (
+                        f"{API_BASE_URL}/{API_KEY}/eventsday.php"
+                        f"?d={str(datestring)}&l={urllib.parse.quote(league)}")
                 else:
                     url = f"{API_BASE_URL}/{API_KEY}/eventsday.php?d={str(datestring)}"
             else:
-                xbmc.log(
-                    msg=
-                    "[TheSportsDB] Wrong method invocation. You need to declare either a datetimedate (datetime.date), a datestring, a leagueid, season, rnd or sport",
-                    level=xbmc.LOGERROR)
+                logging.log(
+                    "[TheSportsDB] Wrong method invocation. "
+                    "You need to declare either a datetimedate (datetime.date), "
+                    "a datestring, a leagueid, season, rnd or sport", )
                 return eventlist
             data = json.load(urllib.request.urlopen(url))
             events = data["events"]
