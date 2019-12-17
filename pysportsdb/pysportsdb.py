@@ -34,12 +34,9 @@ class Api:
             teamlist = []
             if teamid or leagueid:
                 if teamid and not leagueid:
-                    url = '%s/%s/lookupteam.php?id=%s' % (API_BASE_URL,
-                                                          API_KEY, str(teamid))
+                    url = f"{API_BASE_URL}/{API_KEY}/lookupteam.php?id={str(teamid)}"
                 elif leagueid and not teamid:
-                    url = '%s/%s/lookup_all_teams.php?id=%s' % (API_BASE_URL,
-                                                                API_KEY,
-                                                                str(leagueid))
+                    url = f"{API_BASE_URL}/{API_KEY}/lookup_all_teams.php?id={str(leagueid)}"
                 else:
                     xbmc.log(
                         msg="[TheSportsDB] Invalid parameters",
@@ -59,8 +56,7 @@ class Api:
         def League(self, leagueid=None):
             leaguelist = []
             if leagueid:
-                url = '%s/%s/lookupleague.php?id=%s' % (API_BASE_URL, API_KEY,
-                                                        str(leagueid))
+                url = f"{API_BASE_URL}/{API_KEY}/lookupleague.php?id={str(leagueid)}"
                 data = json.load(urllib.request.urlopen(url))
                 leagues = data["leagues"]
                 if leagues:
@@ -76,14 +72,10 @@ class Api:
             playerlist = []
             if playerid or teamid:
                 if playerid and not teamid:
-                    url = '%s/%s/lookupplayer.php?id=%s' % (API_BASE_URL,
-                                                            API_KEY,
-                                                            str(playerid))
+                    url = f"{API_BASE_URL}/{API_KEY}/lookupplayer.php?id={str(playerid)}"
                     key = "players"
                 elif teamid and not playerid:
-                    url = '%s/%s/lookup_all_players.php?id=%s' % (API_BASE_URL,
-                                                                  API_KEY,
-                                                                  str(teamid))
+                    url = f"{API_BASE_URL}/{API_KEY}/lookup_all_players.php?id={str(teamid)}"
                     key = "player"
                 else:
                     xbmc.log(
@@ -104,8 +96,7 @@ class Api:
         def Event(self, eventid=None):
             eventlist = []
             if eventid:
-                url = '%s/%s/lookupevent.php?id=%s' % (API_BASE_URL, API_KEY,
-                                                       str(eventid))
+                url = f"{API_BASE_URL}/{API_KEY}/lookupevent.php?id={str(eventid)}"
                 data = json.load(urllib.request.urlopen(url))
                 events = data["events"]
                 if events:
@@ -121,14 +112,9 @@ class Api:
             table = []
             if leagueid:
                 if season:
-                    url = '%s/%s/lookuptable.php?l=%s&s=%s' % (API_BASE_URL,
-                                                               API_KEY,
-                                                               str(leagueid),
-                                                               str(season))
+                    url = (f"{API_BASE_URL}/{API_KEY}/lookuptable.php?l={str(leagueid)}&s={str(season)}")
                 else:
-                    url = '%s/%s/lookuptable.php?l=%s' % (API_BASE_URL,
-                                                          API_KEY,
-                                                          str(leagueid))
+                    url = f"{API_BASE_URL}/{API_KEY}/lookuptable.php?l={str(leagueid)}"
                     if objects:
                         teams_in_league = self.Team(leagueid=leagueid)
                 data = json.load(urllib.request.urlopen(url))
@@ -154,9 +140,7 @@ class Api:
         def Seasons(self, leagueid=None):
             seasonlist = []
             if leagueid:
-                url = '%s/%s/lookupleague.php?id=%s&s=all' % (API_BASE_URL,
-                                                              API_KEY,
-                                                              str(leagueid))
+                url = f"{API_BASE_URL}/{API_KEY}/lookupleague.php?id={str(leagueid)}&s=all"
                 data = json.load(urllib.request.urlopen(url))
                 entries = data["leagues"]
                 if entries:
@@ -173,16 +157,11 @@ class Api:
             teamlist = []
             if team or sport or country or league:
                 if team and not sport and not country and not league:
-                    url = '%s/%s/searchteams.php?t=%s' % (API_BASE_URL,
-                                                          API_KEY,
-                                                          urllib.parse.quote(team))
+                    url = f"{API_BASE_URL}/{API_KEY}/searchteams.php?t={urllib.parse.quote(team)}"
                 elif not team and league and not sport and not country:
-                    url = '%s/%s/search_all_teams.php?l=%s' % (
-                        API_BASE_URL, API_KEY, urllib.parse.quote(league))
+                    url = (f"{API_BASE_URL}/{API_KEY}/search_all_teams.php?l={urllib.parse.quote(league)}")
                 elif not team and not league and sport and country:
-                    url = '%s/%s/search_all_teams.php?s=%s&c=%s' % (
-                        API_BASE_URL, API_KEY, urllib.parse.quote(sport),
-                        urllib.parse.quote(country))
+                    url = (f"{API_BASE_URL}/{API_KEY}/search_all_teams.php?s={urllib.parse.quote(sport)}&c={urllib.parse.quote(country)}")
                 else:
                     url = None
                 if url:
@@ -206,16 +185,11 @@ class Api:
             playerlist = []
             if team or player:
                 if team and not player:
-                    url = '%s/%s/searchplayers.php?t=%s' % (API_BASE_URL,
-                                                            API_KEY,
-                                                            urllib.parse.quote(team))
+                    url = (f"{API_BASE_URL}/{API_KEY}/searchplayers.php?t={urllib.parse.quote(team)}")
                 elif not team and player:
-                    url = '%s/%s/searchplayers.php?p=%s' % (
-                        API_BASE_URL, API_KEY, urllib.parse.quote(player))
+                    url = (f"{API_BASE_URL}/{API_KEY}/searchplayers.php?p={urllib.parse.quote(player)}")
                 else:
-                    url = '%s/%s/searchplayers.php?t=%s&p=%s' % (
-                        API_BASE_URL, API_KEY, urllib.parse.quote(team),
-                        urllib.parse.quote(player))
+                    url = (f"{API_BASE_URL}/{API_KEY}/searchplayers.php?t={urllib.parse.quote(team)}&p={urllib.parse.quote(player)}")
                 data = json.load(urllib.request.urlopen(url))
                 players = data["player"]
                 if players:
@@ -231,15 +205,11 @@ class Api:
             eventlist = []
             if event or season or filename:
                 if event and not season and not filename:
-                    url = '%s/%s/searchevents.php?e=%s' % (
-                        API_BASE_URL, API_KEY, str(event).replace(" ", "_"))
+                    url = (f"{API_BASE_URL}/{API_KEY}/searchevents.php?e={str(event).replace(' ', '_')}")
                 elif event and season:
-                    url = '%s/%s/searchevents.php?e=%s&s=%s' % (
-                        API_BASE_URL, API_KEY, str(event).replace(" ", "_"),
-                        str(season))
+                    url = (f"{API_BASE_URL}/{API_KEY}/searchevents.php?e={str(event).replace(' ', '_')}&s={str(season)}")
                 elif filename:
-                    url = '%s/%s/searchfilename.php?e=%s' % (
-                        API_BASE_URL, API_KEY, str(filename).replace(" ", "_"))
+                    url = (f"{API_BASE_URL}/{API_KEY}/searchfilename.php?e={str(filename).replace(' ', '_')}")
                 else:
                     url = ""
                 if url:
@@ -259,15 +229,11 @@ class Api:
             leaguelist = []
             if country or sport:
                 if country and not sport:
-                    url = '%s/%s/search_all_leagues.php?c=%s' % (
-                        API_BASE_URL, API_KEY, urllib.parse.quote(country))
+                    url = (f"{API_BASE_URL}/{API_KEY}/search_all_leagues.php?c={urllib.parse.quote(country)}")
                 elif not country and sport:
-                    url = '%s/%s/search_all_leagues.php?s=%s' % (
-                        API_BASE_URL, API_KEY, urllib.parse.quote(sport))
+                    url = (f"{API_BASE_URL}/{API_KEY}/search_all_leagues.php?s={urllib.parse.quote(sport)}")
                 else:
-                    url = '%s/%s/search_all_leagues.php?s=%s&c=%s' % (
-                        API_BASE_URL, API_KEY, urllib.parse.quote(sport),
-                        urllib.parse.quote(country))
+                    url = (f"{API_BASE_URL}/{API_KEY}/search_all_leagues.php?s={urllib.parse.quote(sport)}&c={urllib.parse.quote(country)}")
                 data = json.load(urllib.request.urlopen(url))
                 leagues = data["countrys"]
                 if leagues:
@@ -287,8 +253,7 @@ class Api:
                 teamlist = []
                 leaguelist = []
                 eventlist = []
-                url = '%s/%s/searchloves.php?u=%s' % (API_BASE_URL, API_KEY,
-                                                      str(user))
+                url = f"{API_BASE_URL}/{API_KEY}/searchloves.php?u={str(user)}"
                 data = json.load(urllib.request.urlopen(url))
                 edits = data["players"]
                 if edits:
@@ -357,9 +322,7 @@ class Api:
         def Seasons(self, leagueid=None):
             seasonlist = []
             if leagueid:
-                url = '%s/%s/search_all_seasons.php?id=%s' % (API_BASE_URL,
-                                                              API_KEY,
-                                                              str(leagueid))
+                url = f"{API_BASE_URL}/{API_KEY}/search_all_seasons.php?id={str(leagueid)}"
                 data = json.load(urllib.request.urlopen(url))
                 seasons = data["seasons"]
                 if seasons:
@@ -376,8 +339,7 @@ class Api:
             def Team(self, teamid=None):
                 eventlist = []
                 if teamid:
-                    url = '%s/%s/eventslast.php?id=%s' % (API_BASE_URL,
-                                                          API_KEY, str(teamid))
+                    url = f"{API_BASE_URL}/{API_KEY}/eventslast.php?id={str(teamid)}"
                     data = json.load(urllib.request.urlopen(url))
                     events = data["results"]
                     if events:
@@ -392,9 +354,7 @@ class Api:
             def League(self, leagueid=None):
                 eventlist = []
                 if leagueid:
-                    url = '%s/%s/eventspastleague.php?id=%s' % (API_BASE_URL,
-                                                                API_KEY,
-                                                                str(leagueid))
+                    url = f"{API_BASE_URL}/{API_KEY}/eventspastleague.php?id={str(leagueid)}"
                     data = json.load(urllib.request.urlopen(url))
                     events = data["events"]
                     if events:
@@ -410,8 +370,7 @@ class Api:
             def Team(self, teamid=None):
                 eventlist = []
                 if teamid:
-                    url = '%s/%s/eventsnext.php?id=%s' % (API_BASE_URL,
-                                                          API_KEY, str(teamid))
+                    url = f"{API_BASE_URL}/{API_KEY}/eventsnext.php?id={str(teamid)}"
                     data = json.load(urllib.request.urlopen(url))
                     events = data["events"]
                     if events:
@@ -426,12 +385,9 @@ class Api:
             def League(self, leagueid=None, rnd=None):
                 eventlist = []
                 if leagueid and not rnd:
-                    url = '%s/%s/eventsnextleague.php?id=%s' % (API_BASE_URL,
-                                                                API_KEY,
-                                                                str(leagueid))
+                    url = f"{API_BASE_URL}/{API_KEY}/eventsnextleague.php?id={str(leagueid)}"
                 elif leagueid and rnd:
-                    url = '%s/%s/eventsnextleague.php?id=%s&r=%s' % (
-                        API_BASE_URL, API_KEY, str(leagueid), str(rnd))
+                    url = (f"{API_BASE_URL}/{API_KEY}/eventsnextleague.php?id={str(leagueid)}&r={str(rnd)}")
                 else:
                     xbmc.log(
                         msg="[TheSportsDB] leagueid must be provided",
@@ -454,16 +410,9 @@ class Api:
                    sport=None):
             eventlist = []
             if leagueid and season and rnd:
-                url = '%s/%s/eventsround.php?id=%s&r=%s&s=%s' % (API_BASE_URL,
-                                                                 API_KEY,
-                                                                 str(leagueid),
-                                                                 str(rnd),
-                                                                 str(season))
+                url = (f"{API_BASE_URL}/{API_KEY}/eventsround.php?id={str(leagueid)}&r={str(rnd)}&s={str(season)}")
             elif leagueid and season and not rnd:
-                url = '%s/%s/eventsseason.php?id=%s&s=%s' % (API_BASE_URL,
-                                                             API_KEY,
-                                                             str(leagueid),
-                                                             str(season))
+                url = (f"{API_BASE_URL}/{API_KEY}/eventsseason.php?id={str(leagueid)}&s={str(season)}")
             elif datestring or datetimedate:
                 if datestring:
                     if _util.CheckDateString(datestring):
@@ -484,17 +433,11 @@ class Api:
                             level=xbmc.LOGERROR)
                         return eventlist
                 if sport:
-                    url = '%s/%s/eventsday.php?d=%s&s=%s' % (API_BASE_URL,
-                                                             API_KEY,
-                                                             str(datestring),
-                                                             str(sport))
+                    url = (f"{API_BASE_URL}/{API_KEY}/eventsday.php?d={str(datestring)}&s={str(sport)}")
                 elif league:
-                    url = '%s/%s/eventsday.php?d=%s&l=%s' % (
-                        API_BASE_URL, API_KEY, str(datestring),
-                        urllib.parse.quote(league))
+                    url = (f"{API_BASE_URL}/{API_KEY}/eventsday.php?d={str(datestring)}&l={urllib.parse.quote(league)}")
                 else:
-                    url = '%s/%s/eventsday.php?d=%s' % (API_BASE_URL, API_KEY,
-                                                        str(datestring))
+                    url = f"{API_BASE_URL}/{API_KEY}/eventsday.php?d={str(datestring)}"
             else:
                 xbmc.log(
                     msg=
@@ -510,7 +453,7 @@ class Api:
 
     class Livescores:
         def Soccer(self, objects=False):
-            url = '%s/%s/latestsoccer.php' % (API_BASE_URL, API_KEY)
+            url = f"{API_BASE_URL}/{API_KEY}/latestsoccer.php"
             eventlist = []
             data = json.load(urllib.request.urlopen(url))
             try:
