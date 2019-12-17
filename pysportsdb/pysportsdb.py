@@ -1,6 +1,6 @@
 import json
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import team as _team
 import league as _league
 import player as _player
@@ -45,7 +45,7 @@ class Api:
                         msg="[TheSportsDB] Invalid parameters",
                         level=xbmc.LOGERROR)
                     return teamlist
-                data = json.load(urllib2.urlopen(url))
+                data = json.load(urllib.request.urlopen(url))
                 teams = data["teams"]
                 if teams:
                     for tm in teams:
@@ -61,7 +61,7 @@ class Api:
             if leagueid:
                 url = '%s/%s/lookupleague.php?id=%s' % (API_BASE_URL, API_KEY,
                                                         str(leagueid))
-                data = json.load(urllib2.urlopen(url))
+                data = json.load(urllib.request.urlopen(url))
                 leagues = data["leagues"]
                 if leagues:
                     for lg in leagues:
@@ -90,7 +90,7 @@ class Api:
                         msg="[TheSportsDB] Invalid parameters",
                         level=xbmc.LOGERROR)
                     return playerlist
-                data = json.load(urllib2.urlopen(url))
+                data = json.load(urllib.request.urlopen(url))
                 players = data[key]
                 if players:
                     for pl in players:
@@ -106,7 +106,7 @@ class Api:
             if eventid:
                 url = '%s/%s/lookupevent.php?id=%s' % (API_BASE_URL, API_KEY,
                                                        str(eventid))
-                data = json.load(urllib2.urlopen(url))
+                data = json.load(urllib.request.urlopen(url))
                 events = data["events"]
                 if events:
                     for ev in events:
@@ -131,7 +131,7 @@ class Api:
                                                           str(leagueid))
                     if objects:
                         teams_in_league = self.Team(leagueid=leagueid)
-                data = json.load(urllib2.urlopen(url))
+                data = json.load(urllib.request.urlopen(url))
                 entries = data["table"]
                 if entries:
                     for entry in entries:
@@ -157,7 +157,7 @@ class Api:
                 url = '%s/%s/lookupleague.php?id=%s&s=all' % (API_BASE_URL,
                                                               API_KEY,
                                                               str(leagueid))
-                data = json.load(urllib2.urlopen(url))
+                data = json.load(urllib.request.urlopen(url))
                 entries = data["leagues"]
                 if entries:
                     for entry in entries:
@@ -175,18 +175,18 @@ class Api:
                 if team and not sport and not country and not league:
                     url = '%s/%s/searchteams.php?t=%s' % (API_BASE_URL,
                                                           API_KEY,
-                                                          urllib.quote(team))
+                                                          urllib.parse.quote(team))
                 elif not team and league and not sport and not country:
                     url = '%s/%s/search_all_teams.php?l=%s' % (
-                        API_BASE_URL, API_KEY, urllib.quote(league))
+                        API_BASE_URL, API_KEY, urllib.parse.quote(league))
                 elif not team and not league and sport and country:
                     url = '%s/%s/search_all_teams.php?s=%s&c=%s' % (
-                        API_BASE_URL, API_KEY, urllib.quote(sport),
-                        urllib.quote(country))
+                        API_BASE_URL, API_KEY, urllib.parse.quote(sport),
+                        urllib.parse.quote(country))
                 else:
                     url = None
                 if url:
-                    data = json.load(urllib2.urlopen(url))
+                    data = json.load(urllib.request.urlopen(url))
                     teams = data["teams"]
                     if teams:
                         for tm in teams:
@@ -208,15 +208,15 @@ class Api:
                 if team and not player:
                     url = '%s/%s/searchplayers.php?t=%s' % (API_BASE_URL,
                                                             API_KEY,
-                                                            urllib.quote(team))
+                                                            urllib.parse.quote(team))
                 elif not team and player:
                     url = '%s/%s/searchplayers.php?p=%s' % (
-                        API_BASE_URL, API_KEY, urllib.quote(player))
+                        API_BASE_URL, API_KEY, urllib.parse.quote(player))
                 else:
                     url = '%s/%s/searchplayers.php?t=%s&p=%s' % (
-                        API_BASE_URL, API_KEY, urllib.quote(team),
-                        urllib.quote(player))
-                data = json.load(urllib2.urlopen(url))
+                        API_BASE_URL, API_KEY, urllib.parse.quote(team),
+                        urllib.parse.quote(player))
+                data = json.load(urllib.request.urlopen(url))
                 players = data["player"]
                 if players:
                     for pl in players:
@@ -243,7 +243,7 @@ class Api:
                 else:
                     url = ""
                 if url:
-                    data = json.load(urllib2.urlopen(url))
+                    data = json.load(urllib.request.urlopen(url))
                     events = data["event"]
                     if events:
                         for ev in events:
@@ -260,15 +260,15 @@ class Api:
             if country or sport:
                 if country and not sport:
                     url = '%s/%s/search_all_leagues.php?c=%s' % (
-                        API_BASE_URL, API_KEY, urllib.quote(country))
+                        API_BASE_URL, API_KEY, urllib.parse.quote(country))
                 elif not country and sport:
                     url = '%s/%s/search_all_leagues.php?s=%s' % (
-                        API_BASE_URL, API_KEY, urllib.quote(sport))
+                        API_BASE_URL, API_KEY, urllib.parse.quote(sport))
                 else:
                     url = '%s/%s/search_all_leagues.php?s=%s&c=%s' % (
-                        API_BASE_URL, API_KEY, urllib.quote(sport),
-                        urllib.quote(country))
-                data = json.load(urllib2.urlopen(url))
+                        API_BASE_URL, API_KEY, urllib.parse.quote(sport),
+                        urllib.parse.quote(country))
+                data = json.load(urllib.request.urlopen(url))
                 leagues = data["countrys"]
                 if leagues:
                     for lg in leagues:
@@ -289,7 +289,7 @@ class Api:
                 eventlist = []
                 url = '%s/%s/searchloves.php?u=%s' % (API_BASE_URL, API_KEY,
                                                       str(user))
-                data = json.load(urllib2.urlopen(url))
+                data = json.load(urllib.request.urlopen(url))
                 edits = data["players"]
                 if edits:
                     for edit in edits:
@@ -360,7 +360,7 @@ class Api:
                 url = '%s/%s/search_all_seasons.php?id=%s' % (API_BASE_URL,
                                                               API_KEY,
                                                               str(leagueid))
-                data = json.load(urllib2.urlopen(url))
+                data = json.load(urllib.request.urlopen(url))
                 seasons = data["seasons"]
                 if seasons:
                     for season in seasons:
@@ -378,7 +378,7 @@ class Api:
                 if teamid:
                     url = '%s/%s/eventslast.php?id=%s' % (API_BASE_URL,
                                                           API_KEY, str(teamid))
-                    data = json.load(urllib2.urlopen(url))
+                    data = json.load(urllib.request.urlopen(url))
                     events = data["results"]
                     if events:
                         for event in events:
@@ -395,7 +395,7 @@ class Api:
                     url = '%s/%s/eventspastleague.php?id=%s' % (API_BASE_URL,
                                                                 API_KEY,
                                                                 str(leagueid))
-                    data = json.load(urllib2.urlopen(url))
+                    data = json.load(urllib.request.urlopen(url))
                     events = data["events"]
                     if events:
                         for event in events:
@@ -412,7 +412,7 @@ class Api:
                 if teamid:
                     url = '%s/%s/eventsnext.php?id=%s' % (API_BASE_URL,
                                                           API_KEY, str(teamid))
-                    data = json.load(urllib2.urlopen(url))
+                    data = json.load(urllib.request.urlopen(url))
                     events = data["events"]
                     if events:
                         for event in events:
@@ -437,7 +437,7 @@ class Api:
                         msg="[TheSportsDB] leagueid must be provided",
                         level=xbmc.LOGERROR)
                     return eventlist
-                data = json.load(urllib2.urlopen(url))
+                data = json.load(urllib.request.urlopen(url))
                 events = data["events"]
                 if events:
                     for event in events:
@@ -491,7 +491,7 @@ class Api:
                 elif league:
                     url = '%s/%s/eventsday.php?d=%s&l=%s' % (
                         API_BASE_URL, API_KEY, str(datestring),
-                        urllib.quote(league))
+                        urllib.parse.quote(league))
                 else:
                     url = '%s/%s/eventsday.php?d=%s' % (API_BASE_URL, API_KEY,
                                                         str(datestring))
@@ -501,7 +501,7 @@ class Api:
                     "[TheSportsDB] Wrong method invocation. You need to declare either a datetimedate (datetime.date), a datestring, a leagueid, season, rnd or sport",
                     level=xbmc.LOGERROR)
                 return eventlist
-            data = json.load(urllib2.urlopen(url))
+            data = json.load(urllib.request.urlopen(url))
             events = data["events"]
             if events:
                 for event in events:
@@ -512,7 +512,7 @@ class Api:
         def Soccer(self, objects=False):
             url = '%s/%s/latestsoccer.php' % (API_BASE_URL, API_KEY)
             eventlist = []
-            data = json.load(urllib2.urlopen(url))
+            data = json.load(urllib.request.urlopen(url))
             try:
                 events = data["teams"]["Match"]
             except:
