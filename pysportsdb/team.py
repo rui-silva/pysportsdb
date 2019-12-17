@@ -20,6 +20,7 @@
 import xbmc
 import random
 
+
 class Team:
     def __init__(self):
         self.idTeam = ""
@@ -99,7 +100,7 @@ class Team:
     @property
     def RandomFanart(self):
         if self.FanartList:
-            return self.FanartList[random.randint(0,len(self.FanartList)-1)]
+            return self.FanartList[random.randint(0, len(self.FanartList) - 1)]
         else:
             return None
 
@@ -136,6 +137,7 @@ class Team:
         elif "polish" in xbmcLanguage.lower():
             if self.strDescriptionPL: description = self.strDescriptionPL
         return description
+
 
 def as_team(d):
     t = Team()

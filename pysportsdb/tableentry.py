@@ -18,6 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+
 class Tableentry:
     def __init__(self):
         self.name = ""
@@ -32,8 +33,9 @@ class Tableentry:
         self.total = ""
         self.Team = ""
 
-    def setTeamObject(self,obj):
+    def setTeamObject(self, obj):
         self.Team = obj
+
 
 def as_tableentry(d):
     t = Tableentry()

@@ -21,6 +21,7 @@
 import random
 import datetime
 
+
 class Player:
     def __init__(self):
         self.idPlayer = ""
@@ -71,7 +72,6 @@ class Player:
         self.strFanart4 = ""
         self.strLocked = ""
 
-
     @property
     def FanartList(self):
         fanartlist = []
@@ -84,7 +84,7 @@ class Player:
     @property
     def RandomFanart(self):
         if self.FanartList:
-            return self.FanartList[random.randint(0,len(self.FanartList)-1)]
+            return self.FanartList[random.randint(0, len(self.FanartList) - 1)]
         else:
             return None
 
@@ -98,7 +98,8 @@ class Player:
     @property
     def dateSignedAsDatetime(self):
         if self.dateSigned:
-            return datetime.datetime.strptime(self.dateSigned, "%Y-%m-%d").date()
+            return datetime.datetime.strptime(self.dateSigned,
+                                              "%Y-%m-%d").date()
         else:
             return None
 
@@ -135,6 +136,7 @@ class Player:
         elif "polish" in xbmcLanguage.lower():
             if self.strDescriptionPL: description = self.strDescriptionPL
         return description
+
 
 def as_player(d):
     p = Player()
