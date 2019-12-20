@@ -18,25 +18,4 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-class User:
-	def __init__(self):
-		self.strUsername = ""
-		self.Teams = ""
-		self.Players = ""
-		self.Leagues = ""
-		self.Events = ""
-
-	def setUsername(self,user):
-		self.strUsername = user
-
-	def setTeams(self,teams):
-		self.Teams = teams
-
-	def setPlayers(self,players):
-		self.Players = players
-
-	def setLeagues(self,leagues):
-		self.Leagues = leagues
-
-	def setEvents(self,events):
-		self.Events = events
+from .pysportsdb import *

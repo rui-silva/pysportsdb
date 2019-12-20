@@ -18,4 +18,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-from thesportsdb import *
+
+class Tableentry:
+    def __init__(self):
+        self.name = ""
+        self.teamid = ""
+        self.played = ""
+        self.goalsfor = ""
+        self.goalsagainst = ""
+        self.goalsdifference = ""
+        self.win = ""
+        self.draw = ""
+        self.loss = ""
+        self.total = ""
+        self.Team = ""
+
+    def setTeamObject(self, obj):
+        self.Team = obj
+
+
+def as_tableentry(d):
+    t = Tableentry()
+    t.__dict__.update(d)
+    return t
